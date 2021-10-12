@@ -1,11 +1,32 @@
-import React from 'react';
+import React, { createContext, useState } from 'react';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from "react-router-dom";
 import './App.css';
+import Home from './Components/HomePage/Home/Home';
 
+
+export const UserContext = createContext();
 function App() {
+  const [loggedInUser, setLoggedInUser] = useState({});
+
   return (
-    <div className="App">
-      <h1 className="text-danger">Hello</h1>
-    </div>
+    <UserContext.Provider value={[loggedInUser, setLoggedInUser]}>
+      <Router>
+        <Switch>
+          <Route path="/home">
+            <Home />
+          </Route>
+          <Route exact path="/">
+            <Home />
+          </Route>
+        </Switch>
+      </Router>
+    </UserContext.Provider>
+
+
   );
 }
 
