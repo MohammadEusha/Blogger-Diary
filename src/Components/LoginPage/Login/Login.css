@@ -1,0 +1,53 @@
+.logIn {
+  background-color: #12161f;
+  color: white;
+  height: 980px;
+  overflow-x: hidden;
+}
+
+@media (max-width: 600px) {
+  .logIn {
+    height: 1150px;
+  }
+}
+
+.main-content {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  gap: 70px;
+  align-items: center;
+}
+.input-form {
+  background-color: #050c1a;
+  border: 1px solid #fff;
+  padding: 25px;
+  border-radius: 5px;
+  float: left;
+}
+.input-form h3 {
+  margin: 10px 0px;
+}
+.input-form .input-group {
+  margin: 10px 0;
+}
+
+.input-form input {
+  width: 100%;
+  display: block;
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  background: #12161f;
+  border-radius: 4px;
+  margin: 10px 0;
+}
+.input-form .inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.input-content {
+  color: #fff;
+  width: 100%;
+}

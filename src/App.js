@@ -7,6 +7,8 @@ import {
 import './App.css';
 import CreateBlog from './Components/CreateBlog/CreateBlog';
 import Home from './Components/HomePage/Home/Home';
+import Login from './Components/LoginPage/Login/Login';
+import PrivateRoute from './Components/LoginPage/PrivateRoute/PrivateRoute';
 
 
 export const UserContext = createContext();
@@ -17,14 +19,17 @@ function App() {
     <UserContext.Provider value={[loggedInUser, setLoggedInUser]}>
       <Router>
         <Switch>
-          <Route path="/home">
+          <PrivateRoute path="/home">
             <Home />
-          </Route>
-          <Route path="/createBlog">
+          </PrivateRoute>
+          <PrivateRoute path="/createBlog">
             <CreateBlog />
+          </PrivateRoute>
+          <Route path="/login">
+            <Login />
           </Route>
           <Route exact path="/">
-            <Home />
+            <Login />
           </Route>
         </Switch>
       </Router>
