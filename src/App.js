@@ -5,6 +5,7 @@ import {
   Route,
 } from "react-router-dom";
 import './App.css';
+import CreateBlog from './Components/CreateBlog/CreateBlog';
 import Home from './Components/HomePage/Home/Home';
 
 
@@ -18,6 +19,9 @@ function App() {
         <Switch>
           <Route path="/home">
             <Home />
+          </Route>
+          <Route path="/createBlog">
+            <CreateBlog />
           </Route>
           <Route exact path="/">
             <Home />
