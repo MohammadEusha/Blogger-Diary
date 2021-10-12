@@ -15,7 +15,7 @@ const Navbar = () => {
     }, []);
 
     return (
-        <nav className={(isSticky || isCollapsed) ? "navbar  navbar-expand-lg navbar-dark bg-dark fixed-top" : "navbar  navbar-expand-lg navbar-light color text-dark"}>
+        <nav className={(isSticky || isCollapsed) ? "navbar  navbar-expand-lg navbar-dark bg-dark fixed-top" : "navbar  navbar-expand-lg navbar-light bg-light color text-dark"}>
             <div class="container-fluid">
                 <div>
                     {/* <img className="transaction-area " style={{ height: "50px", }} src={logo} alt="" /> */}
