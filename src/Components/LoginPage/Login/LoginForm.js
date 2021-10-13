@@ -1,77 +1,44 @@
 import firebase from "firebase/app";
 import "firebase/auth";
 import firebaseConfig from './firebase.config';
+import jwt_decode from "jwt-decode";
 
 export const initializeLoginFramework = () => {
-    if (!firebase.apps.length) {
-        firebase.initializeApp(firebaseConfig);
-    } else {
-        firebase.app();
-    }
+    !firebase.apps.length && firebase.initializeApp(firebaseConfig);
 
 }
-
 export const handleGoogleSignIn = () => {
     const googleProvider = new firebase.auth.GoogleAuthProvider();
-    return firebase.auth().signInWithPopup(googleProvider)
+    return firebase
+        .auth()
+        .signInWithPopup(googleProvider)
         .then(res => handleResponse(res))
-
-        .catch(err => {
-            console.log(err);
-            console.log(err.message);
-        })
 }
 
-export const handleSignOut = () => {
-    return firebase.auth().signOut()
-        .then(res => {
-            const signedOutUser = {
-                isSignedIn: false,
-                name: '',
-                email: '',
-                photo: '',
-                error: '',
-                success: false
-            }
-            return signedOutUser;
-        }).catch(err => {
-            console.log(err)
-            console.log(err.message)
-        });
-}
+
 
 export const createUserWithEmailAndPassword = (name, email, password) => {
-    return firebase.auth().createUserWithEmailAndPassword(email, password)
+    return firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, password)
         .then(res => {
             updateUserName(name);
             return handleResponse(res);
-
         })
-        // .then(res => {
+}
 
-        //     const newUserInfo = res.user;
-        //     newUserInfo.error = '';
-        //     newUserInfo.success = true;
-        //     updateUserName(displayName);
-        //     return newUserInfo;
-        // })
-        .catch(error => {
-            const newUserInfo = {};
-            newUserInfo.error = error.message;
-            newUserInfo.success = false;
-            return newUserInfo;
-        });
+const updateUserName = name => {
+    const user = firebase.auth().currentUser;
+    user.updateProfile({
+        displayName: name
+    })
 }
 
 export const signInWithEmailAndPassword = (email, password) => {
-    return firebase.auth().signInWithEmailAndPassword(email, password)
+    return firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password)
         .then(res => handleResponse(res))
-        .catch(function (error) {
-            const newUserInfo = {};
-            newUserInfo.error = error.message;
-            newUserInfo.success = false;
-            return newUserInfo;
-        });
 }
 
 const handleResponse = (res) => {
@@ -85,14 +52,44 @@ const handleResponse = (res) => {
     return signedInUser;
 }
 
-const updateUserName = name => {
-    const user = firebase.auth().currentUser;
+export const setJWTToken = () => {
+    return firebase
+        .auth().currentUser
+        .getIdToken(true)
+        .then(idToken => {
+            localStorage.setItem('token', idToken)
+        })
+}
 
-    user.updateProfile({
-        displayName: name
-    }).then(function () {
-        console.log('user name updated successfully')
-    }).catch(function (error) {
-        console.log(error)
-    });
+export const getDecodedUser = () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        return {};
+    }
+    const { name, picture, email } = jwt_decode(token);
+    const decodedUser = {
+        isSignedIn: true,
+        name: name,
+        email: email,
+        photo: picture || "https://i.ibb.co/5GzXkwq/user.png"
+    }
+    return decodedUser;
+}
+
+
+export const handleSignOut = () => {
+    return firebase
+        .auth()
+        .signOut()
+        .then(() => {
+            localStorage.removeItem('token');
+            const signedOutUser = {
+                isSignedIn: false,
+                userName: '',
+                email: '',
+                userPhoto: ''
+            }
+            return signedOutUser;
+        })
+        .catch(error => console.log(error.message))
 }

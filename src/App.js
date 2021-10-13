@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import {
   BrowserRouter as Router,
   Switch,
@@ -15,16 +15,17 @@ export const UserContext = createContext();
 function App() {
   const [loggedInUser, setLoggedInUser] = useState({});
 
+
   return (
     <UserContext.Provider value={[loggedInUser, setLoggedInUser]}>
       <Router>
         <Switch>
-          <PrivateRoute path="/home">
+          <Route path="/home">
             <Home />
-          </PrivateRoute>
-          <PrivateRoute path="/createBlog">
+          </Route>
+          <Route path="/createBlog">
             <CreateBlog />
-          </PrivateRoute>
+          </Route>
           <Route path="/login">
             <Login />
           </Route>

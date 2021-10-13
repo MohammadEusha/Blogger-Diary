@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import firebase from "firebase/app"
 import "firebase/auth";
 import firebaseConfig from './firebase.config';
@@ -10,9 +10,10 @@ import { useHistory, useLocation } from 'react-router';
 import { UserContext } from '../../../App';
 import Navbar from '../../HomePage/Navbar/Navbar';
 import "./Login.css"
-import { createUserWithEmailAndPassword, handleGoogleSignIn, initializeLoginFramework, signInWithEmailAndPassword } from './LoginForm';
+import { createUserWithEmailAndPassword, handleGoogleSignIn, initializeLoginFramework, setJWTToken, signInWithEmailAndPassword } from './LoginForm';
 
 const Login = () => {
+
     if (!firebase.apps.length) {
         firebase.initializeApp(firebaseConfig);
     } else {
@@ -44,6 +45,7 @@ const Login = () => {
     const handleResponse = (res, redirect) => {
         setUser(res);
         setLoggedInUser(res);
+        setJWTToken()
         if (redirect) {
             history.replace(from);
         }
@@ -83,6 +85,8 @@ const Login = () => {
         e.preventDefault();
 
     }
+
+
     return (
         <div className="logIn">
             <div className="text-center pt-5 text-light">
@@ -97,15 +101,15 @@ const Login = () => {
                                 <form onSubmit={handleSubmit} x>
                                     <div className="input-group ">
                                         {newUser && <h4>Name</h4>}
-                                        {newUser && <input className="text-light" name="name" type="text" onBlur={handleBlur} placeholder="Your name" />}
+                                        {newUser && <input className="text-light" name="name" type="text" placeholder="Your name" />}
                                     </div>
                                     <div className="input-group">
                                         <label for=""><h4>Email</h4></label>
-                                        <input className="text-light" type="text" name="email" onBlur={handleBlur} placeholder="Your Email address" required />
+                                        <input className="text-light" type="text" name="email" placeholder="Your Email address" required />
                                     </div>
                                     <div className="input-group">
                                         <label for=""><h4>Password</h4></label>
-                                        <input className="text-light" type="password" name="password" onBlur={handleBlur} placeholder="Your Password" required />
+                                        <input className="text-light" type="password" name="password" placeholder="Your Password" required />
                                     </div>
                                     <div className="d-grid">
                                         <input className="btn-lg  btn-block btn-danger" type="submit" value={newUser ? 'Sign Up' : 'Sign In'} />
@@ -120,8 +124,6 @@ const Login = () => {
                                     </div>
                                 </form>
 
-                                <p style={{ color: 'red' }}>{user.error}</p>
-                                {user.success && <p style={{ color: 'green' }}>User {newUser ? 'created' : 'Logged In'} successfully</p>}
                             </div>
                         </div>
                         {/* <div className="d-flex align-items-center justify-content-center mb-1">

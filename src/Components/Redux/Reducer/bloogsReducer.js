@@ -2,6 +2,7 @@ import blogs from '../../FakeData/FakeData.json'
 
 const initialState = {
     blogsList: [...blogs],
+    users: []
 }
 
 const blogsReducer = (state = initialState, action) => {
@@ -13,6 +14,7 @@ const blogsReducer = (state = initialState, action) => {
             }
             return newState
         }
+
         default: {
             return state
         }
